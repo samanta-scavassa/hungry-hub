@@ -88,8 +88,11 @@ function SignupPage(props) {
               <DatePicker
                 label="Date of Birth"
                 value={dateOfBirth}
-                onChange={(date) => setDateOfBirth(date)} 
+                onChange={(date) => setDateOfBirth(date)}
                 required
+                renderInput={(params) => (
+                  <TextField {...params} helperText={null} />
+                )}
               />
             </LocalizationProvider>
             <label>PHONE NUMBER</label>
@@ -108,8 +111,8 @@ function SignupPage(props) {
             <Button
               sx={{ backgroundColor: "white", color: "#EF233C" }}
               variant="outlined"
-              type="submit"
               color="error"
+              onClick={() => navigate("/hungry-hub")}
             >
               BACK
             </Button>
