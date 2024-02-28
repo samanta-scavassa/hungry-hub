@@ -48,24 +48,25 @@ export default function Navbar() {
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <img className="Logo" src={logo} />
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
-            sx={{
-              mr: 2,
-              display: { xs: "none", md: "flex" },
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          >
-            HUNGRY HUB
-          </Typography>
-
+          <Link to={"/hungry-hub"}>
+            <Typography
+              variant="h6"
+              noWrap
+              component="a"
+              href="#app-bar-with-responsive-menu"
+              sx={{
+                mr: 2,
+                display: { xs: "none", md: "flex" },
+                fontFamily: "monospace",
+                fontWeight: 700,
+                letterSpacing: ".3rem",
+                color: "white",
+                textDecoration: "none",
+              }}
+            >
+              HUNGRY HUB
+            </Typography>
+          </Link>
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
@@ -95,16 +96,15 @@ export default function Navbar() {
                 display: { xs: "block", md: "none" },
               }}
             >
-              {pages.map(({name, url}) => (
+              {pages.map(({ name, url }) => (
                 <MenuItem key={name} onClick={handleCloseNavMenu}>
-                <Link to={url}>
-                  <Typography textAlign="center">{name}</Typography>
+                  <Link to={url}>
+                    <Typography textAlign="center">{name}</Typography>
                   </Link>
                 </MenuItem>
               ))}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
           <Typography
             variant="h5"
             noWrap
@@ -121,7 +121,7 @@ export default function Navbar() {
               textDecoration: "none",
             }}
           >
-            LOGO
+            HUNGRY HUB
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map(({ name, url }) => (
