@@ -1,0 +1,18 @@
+.LoginBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-bottom: 100px;
+}
+
+.LoginForm {
+  min-width: 400px;
+}
+
+.LoginButtons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 48px;
+}
