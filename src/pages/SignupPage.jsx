@@ -7,7 +7,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import "./SignupPage.css";
 
 function SignupPage(props) {
-  const [name, setName] = useState("");
+  const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [dateOfBirth, setDateOfBirth] = useState(null);
@@ -19,19 +19,19 @@ function SignupPage(props) {
 
   const handleEmail = (e) => setEmail(e.target.value);
   const handlePassword = (e) => setPassword(e.target.value);
-  const handleName = (e) => setName(e.target.value);
+  const handleName = (e) => setFullName(e.target.value);
   const handlePhoneNumber = (e) => setPhoneNumber(e.target.value);
 
   const handleSignupSubmit = (e) => {
     e.preventDefault();
-    const requestBody = { email, password, name, phoneNumber, dateOfBirth };
+    const requestBody = { email, password, fullName, phoneNumber, dateOfBirth };
 
     authService
       .signup(requestBody)
       .then((response) => {
         setSuccessMessage(true);
         setTimeout(function () {
-          navigate("/login");
+          navigate("/hungry-hub/login");
         }, 3500);
       })
       .catch((error) => {
@@ -51,13 +51,13 @@ function SignupPage(props) {
 
         <form className="SignupForm" onSubmit={handleSignupSubmit}>
           <Stack spacing={2} direction="column" sx={{ margin: 4 }}>
-            <label>NAME</label>
+            <label>FULL NAME</label>
             <TextField
               id="outlined-required"
               label="Name"
               name="user-name"
               type="text"
-              value={name}
+              value={fullName}
               onChange={handleName}
               required
             />
