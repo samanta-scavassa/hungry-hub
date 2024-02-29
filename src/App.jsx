@@ -7,6 +7,8 @@ import LoginPage from "./pages/LoginPage";
 import IsAnon from "./components/IsAnon";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import EditProfilePage from "./pages/EditProfilePage";
+
 
 function App() {
   return (
@@ -17,6 +19,7 @@ function App() {
           <Route path="/hungry-hub" element={<HomePage />} />
           <Route path="/hungry-hub/signup" element={<SignupPage />} />
           <Route path="/hungry-hub/login" element={<LoginPage />} />
+          <Route path="/hungry-hub/edit-profile/:userId" element={<EditProfilePage />} />
           <Route path="*" element={<ErrorPage />} />
         </Routes>
       </div>
