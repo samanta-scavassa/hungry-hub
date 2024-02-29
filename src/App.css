@@ -9,3 +9,20 @@ body {
   margin: 0;
   padding: 0;
 }
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+/* .App {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.Pages {
+  flex: 1;
+  overflow: auto;
+} */
