@@ -33,7 +33,6 @@ export default function EditProfilePage() {
     fetchUser();
   }, []);
 
-  console.log("The user that i am trying to edit =>", user);
   if (!user) {
     return (
       <div>
@@ -45,10 +44,6 @@ export default function EditProfilePage() {
   const handleEmail = (e) =>
     setUser((user) => {
       return { ...user, email: e.target.value };
-    });
-  const handlePassword = (e) =>
-    setUser((user) => {
-      return { ...user, password: e.target.value };
     });
   const handleName = (e) =>
     setUser((user) => {
@@ -102,17 +97,6 @@ export default function EditProfilePage() {
               type="email"
               value={user.email}
               onChange={handleEmail}
-              required
-            />
-
-            <label>PASSWORD</label>
-            <TextField
-              id="outlined-required"
-              label="Password"
-              name="password"
-              type="password"
-              value={user.password}
-              onChange={handlePassword}
               required
             />
 

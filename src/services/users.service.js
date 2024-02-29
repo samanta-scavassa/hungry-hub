@@ -18,6 +18,10 @@ class UserService {
     deleteUser = id => {
       return this.api.delete(`/api/users/${id}`);
     };
+
+    updateUserPassword = (id, requestBody) => {
+      return this.api.patch(`/api/users/${id}/password`, requestBody)
+    }
 }
 
 const userService = new UserService();
