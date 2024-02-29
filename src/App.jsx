@@ -18,7 +18,7 @@ function App() {
         <Routes>
           <Route path="/hungry-hub" element={<HomePage />} />
           <Route path="/hungry-hub/signup" element={<SignupPage />} />
-          <Route path="/hungry-hub/login" element={<LoginPage />} />
+          <Route path="/hungry-hub/login" element={<IsAnon><LoginPage /></IsAnon>} />
           <Route path="/hungry-hub/edit-profile/:userId" element={<EditProfilePage />} />
           <Route path="*" element={<ErrorPage />} />
         </Routes>

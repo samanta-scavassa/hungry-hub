@@ -2,14 +2,14 @@ import { Button, TextField } from "@mui/material";
 import authService from "../services/auth.service";
 import { useNavigate } from "react-router";
 import { useContext, useState } from "react";
-// import { AuthContext } from "../context/auth.context";
+import { AuthContext } from "../context/auth.context";
 import { Stack } from "@mui/system";
 import "./LoginPage.css";
 
 export default function LoginPage(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-//   const { storeToken, authenticateUser } = useContext(AuthContext);
+  const { storeToken, authenticateUser } = useContext(AuthContext);
 
   const navigate = useNavigate();
 
@@ -24,8 +24,8 @@ export default function LoginPage(props) {
     authService
       .login(requestBody)
       .then((response) => {
-        // storeToken(response.data.authToken);
-        // authenticateUser();
+        storeToken(response.data.authToken);
+        authenticateUser();
         navigate("/hungry-hub");
       })
       .catch((error) => {
