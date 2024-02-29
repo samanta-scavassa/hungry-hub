@@ -1,33 +1,64 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import authService from "../services/auth.service";
-import { Alert, Button, Stack, TextField } from "@mui/material";
+import { useNavigate, useParams } from "react-router-dom";
+import Loading from "../components/Loading";
+import userService from "../services/users.service";
+import { Stack } from "@mui/system";
+import { Alert, Button, TextField } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { useEffect, useState } from "react";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import "./SignupPage.css";
+import "./EditProfilePage.css";
 
-function SignupPage(props) {
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [dateOfBirth, setDateOfBirth] = useState(null);
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [errorMessage, setErrorMessage] = useState(undefined);
+export default function EditProfilePage() {
+  const { userId } = useParams();
   const [successMessage, setSuccessMessage] = useState(false);
-
+  const [user, setUser] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(undefined);
+  const [dateOfBirth, setDateOfBirth] = useState(null);
   const navigate = useNavigate();
 
-  const handleEmail = (e) => setEmail(e.target.value);
-  const handlePassword = (e) => setPassword(e.target.value);
-  const handleName = (e) => setFullName(e.target.value);
-  const handlePhoneNumber = (e) => setPhoneNumber(e.target.value);
+  const fetchUser = () => {
+    userService
+      .getUser(userId)
+      .then((res) => {
+        setUser(res.data);
+        setDateOfBirth(res.data.dateOfBirth);
+      })
+      .catch((err) => {
+        console.log(err);
+        navigate("/*");
+      });
+  };
 
-  const handleSignupSubmit = (e) => {
+  useEffect(() => {
+    fetchUser();
+  }, []);
+
+  if (!user) {
+    return (
+      <div>
+        <Loading />
+      </div>
+    );
+  }
+
+  const handleEmail = (e) =>
+    setUser((user) => {
+      return { ...user, email: e.target.value };
+    });
+  const handleName = (e) =>
+    setUser((user) => {
+      return { ...user, fullName: e.target.value };
+    });
+  const handlePhoneNumber = (e) =>
+    setUser((user) => {
+      return { ...user, phoneNumber: e.target.value };
+    });
+
+  const handleEditSubmit = (e) => {
     e.preventDefault();
-    const requestBody = { email, password, fullName, phoneNumber, dateOfBirth };
 
-    authService
-      .signup(requestBody)
+    userService
+      .updateUser(userId, user)
       .then((response) => {
         setSuccessMessage(true);
         setTimeout(function () {
@@ -37,19 +68,16 @@ function SignupPage(props) {
       .catch((error) => {
         const errorDescription = error.response.data.message;
         setErrorMessage(errorDescription);
+        console.log(errorDescription);
         navigate("/*");
       });
   };
-
   return (
-    <div className="SignupPage">
-      <div className="SignupBox">
-        <h1>Create new Account</h1>
-        <p>
-          Already registered?<Link to={"/login"}> Login</Link>
-        </p>
+    <div>
+      <div className="EditProfilePage">
+        <h1>Edit profile</h1>
 
-        <form className="SignupForm" onSubmit={handleSignupSubmit}>
+        <form className="EditProfileForm" onSubmit={handleEditSubmit}>
           <Stack spacing={2} direction="column" sx={{ margin: 4 }}>
             <label>FULL NAME</label>
             <TextField
@@ -57,7 +85,7 @@ function SignupPage(props) {
               label="Name"
               name="user-name"
               type="text"
-              value={fullName}
+              value={user.fullName}
               onChange={handleName}
               required
             />
@@ -67,19 +95,8 @@ function SignupPage(props) {
               label="E-mail"
               name="email"
               type="email"
-              value={email}
+              value={user.email}
               onChange={handleEmail}
-              required
-            />
-
-            <label>PASSWORD</label>
-            <TextField
-              id="outlined-required"
-              label="Password"
-              name="password"
-              type="password"
-              value={password}
-              onChange={handlePassword}
               required
             />
 
@@ -87,8 +104,13 @@ function SignupPage(props) {
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
                 label="Date of Birth"
-                value={dateOfBirth}
-                onChange={(date) => setDateOfBirth(date)}
+                value={user.dateOfBirth}
+                onChange={(date) => {
+                  setDateOfBirth(date);
+                  setUser((user) => {
+                    return { ...user, dateOfBirth: dateOfBirth };
+                  });
+                }}
                 required
                 renderInput={(params) => (
                   <TextField {...params} helperText={null} />
@@ -102,12 +124,12 @@ function SignupPage(props) {
               name="phoneNumber"
               type="text"
               pattern="(\(?([\d \-\)\–\+\/\(]+){6,}\)?([ .\-–\/]?)([\d]+))"
-              value={phoneNumber}
+              value={user.phoneNumber}
               onChange={handlePhoneNumber}
               required
             />
           </Stack>
-          <div className="SignupButtons">
+          <div className="EditButtons">
             <Button
               sx={{ backgroundColor: "white", color: "#EF233C" }}
               variant="outlined"
@@ -122,11 +144,11 @@ function SignupPage(props) {
               color="error"
               type="submit"
             >
-              SIGN UP
+              SAVE
             </Button>
           </div>
           {successMessage && (
-            <Alert sx={{ mb: 2 }}>Registration successful!</Alert>
+            <Alert sx={{ mb: 2 }}>User succesfully saved</Alert>
           )}
         </form>
 
@@ -135,5 +157,3 @@ function SignupPage(props) {
     </div>
   );
 }
-
-export default SignupPage;

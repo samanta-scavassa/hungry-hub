@@ -1,16 +1,18 @@
-.LoginBox {
+.EditProfilePage {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  min-height: 100vh;
+  margin-bottom: 100px;
+  position: relative;
+  min-height: 100%;
 }
 
-.LoginForm {
+.EditProfileForm {
   min-width: 400px;
 }
 
-.LoginButtons {
+.EditButtons {
   display: flex;
   justify-content: center;
   align-items: center;
