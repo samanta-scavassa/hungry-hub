@@ -17,11 +17,18 @@ import PersonIcon from "@mui/icons-material/Person";
 import "./Navbar.css";
 import { Link } from "react-router-dom";
 
+const jwtToken = localStorage.getItem("authToken");
+const userId = jwtToken ? JSON.parse(atob(jwtToken.split(".")[1]))._id : null;
 const pages = [
   { name: "Restaurants", url: "/restaurants" },
   { name: "Deliverer", url: "/delieverer" },
 ];
-const settings = ["Profile", "Account", "My Adresses", "Logout"];
+const settings = [
+  { name: "Profile", url: "/hungry-hub/edit-profile" },
+  { name: "Password", url: "/hungry-hub/edit-password" },
+  { name: "My Adresses", url: "/hungry-hub/user-adresses" },
+  { name: "Logout", url: "/hungry-hub/logout" },
+];
 
 export default function Navbar() {
   const [anchorElNav, setAnchorElNav] = useState(null);
@@ -134,36 +141,39 @@ export default function Navbar() {
               </Link>
             ))}
           </Box>
-
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <PersonIcon alt="Profile" sx={{ color: "white" }} />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: "45px" }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
+          {userId && (
+            <Box sx={{ flexGrow: 0 }}>
+              <Tooltip title="Open settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <PersonIcon alt="Profile" sx={{ color: "white" }} />
+                </IconButton>
+              </Tooltip>
+              <Menu
+                sx={{ mt: "45px" }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                {settings.map(({ name, url }) => (
+                  <MenuItem key={name} onClick={handleCloseUserMenu}>
+                    <Link to={`${url}/${userId}`}>
+                      <Typography textAlign="center">{name}</Typography>
+                    </Link>
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Box>
+          )}
         </Toolbar>
       </Container>
     </AppBar>
