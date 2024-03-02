@@ -1,0 +1,9 @@
+.Media {
+  flex: 1;
+  position: relative;
+}
+
+.MediaLink {
+  display: flex;
+  flex: 1;
+}
