@@ -37,7 +37,7 @@ const restaurantOwnerSettings = [
 const delivererSettings = [
   { name: "Profile", url: "/hungry-hub/edit-profile" },
   { name: "Password", url: "/hungry-hub/edit-password" },
-  { name: "My Delivers", url: "/hungry-hub/user-delivers" }
+  { name: "My Delivers", url: "/hungry-hub/user-delivers" },
 ];
 
 export default function Navbar() {
@@ -157,119 +157,134 @@ export default function Navbar() {
             ))}
           </Box>
           {isLoggedIn && user.roleId === customerRoleId && (
-            <Box sx={{ flexGrow: 0 }}>
-              <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <PersonIcon alt="Profile" sx={{ color: "white" }} />
-                </IconButton>
-              </Tooltip>
-              <Menu
-                sx={{ mt: "45px" }}
-                id="menu-appbar"
-                anchorEl={anchorElUser}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                open={Boolean(anchorElUser)}
-                onClose={handleCloseUserMenu}
-              >
-                {customerSettings.map(({ name, url }) => (
-                  <MenuItem key={name} onClick={handleCloseUserMenu}>
-                    <Link to={`${url}/${user._id}`}>
-                      <Typography textAlign="center">{name}</Typography>
-                    </Link>
+            <Box sx={{ display: "flex", gap: 2 }}>
+              <Typography textAlign="center">
+                Welcome, {user.fullName.split(" ")[0]}
+              </Typography>
+              <Box sx={{ flexGrow: 0 }}>
+                <Tooltip title="Open settings">
+                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                    <PersonIcon alt="Profile" sx={{ color: "white" }} />
+                  </IconButton>
+                </Tooltip>
+                <Menu
+                  sx={{ mt: "45px" }}
+                  id="menu-appbar"
+                  anchorEl={anchorElUser}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  open={Boolean(anchorElUser)}
+                  onClose={handleCloseUserMenu}
+                >
+                  {customerSettings.map(({ name, url }) => (
+                    <MenuItem key={name} onClick={handleCloseUserMenu}>
+                      <Link to={`${url}/${user._id}`}>
+                        <Typography textAlign="center">{name}</Typography>
+                      </Link>
+                    </MenuItem>
+                  ))}
+                  <MenuItem key={"logOut"} onClick={handleCloseUserMenu}>
+                    <Button onClick={logOutUser} sx={{ color: "gray" }}>
+                      Logout
+                    </Button>
                   </MenuItem>
-                ))}
-                <MenuItem key={"logOut"} onClick={handleCloseUserMenu}>
-                  <Button onClick={logOutUser} sx={{ color: "gray" }}>
-                    Logout
-                  </Button>
-                </MenuItem>
-              </Menu>
+                </Menu>
+              </Box>
             </Box>
           )}
 
           {isLoggedIn && user.roleId === restaurantRoleId && (
-            <Box sx={{ flexGrow: 0 }}>
-              <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <PersonIcon alt="Profile" sx={{ color: "white" }} />
-                </IconButton>
-              </Tooltip>
-              <Menu
-                sx={{ mt: "45px" }}
-                id="menu-appbar"
-                anchorEl={anchorElUser}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                open={Boolean(anchorElUser)}
-                onClose={handleCloseUserMenu}
-              >
-                {restaurantOwnerSettings.map(({ name, url }) => (
-                  <MenuItem key={name} onClick={handleCloseUserMenu}>
-                    <Link to={`${url}/${user._id}`}>
-                      <Typography textAlign="center">{name}</Typography>
-                    </Link>
+            <Box sx={{ display: "flex", gap: 2 }}>
+              <Typography textAlign="center">
+                Welcome, {user.fullName.split(" ")[0]}
+              </Typography>
+              <Box sx={{ flexGrow: 0 }}>
+                <Tooltip title="Open settings">
+                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                    <PersonIcon alt="Profile" sx={{ color: "white" }} />
+                  </IconButton>
+                </Tooltip>
+                <Menu
+                  sx={{ mt: "45px" }}
+                  id="menu-appbar"
+                  anchorEl={anchorElUser}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  open={Boolean(anchorElUser)}
+                  onClose={handleCloseUserMenu}
+                >
+                  {restaurantOwnerSettings.map(({ name, url }) => (
+                    <MenuItem key={name} onClick={handleCloseUserMenu}>
+                      <Link to={`${url}/${user._id}`}>
+                        <Typography textAlign="center">{name}</Typography>
+                      </Link>
+                    </MenuItem>
+                  ))}
+                  <MenuItem key={"logOut"} onClick={handleCloseUserMenu}>
+                    <Button onClick={logOutUser} sx={{ color: "gray" }}>
+                      Logout
+                    </Button>
                   </MenuItem>
-                ))}
-                <MenuItem key={"logOut"} onClick={handleCloseUserMenu}>
-                  <Button onClick={logOutUser} sx={{ color: "gray" }}>
-                    Logout
-                  </Button>
-                </MenuItem>
-              </Menu>
+                </Menu>
+              </Box>
             </Box>
           )}
 
           {isLoggedIn && user.roleId === delivererRoleId && (
-            <Box sx={{ flexGrow: 0 }}>
-              <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <PersonIcon alt="Profile" sx={{ color: "white" }} />
-                </IconButton>
-              </Tooltip>
-              <Menu
-                sx={{ mt: "45px" }}
-                id="menu-appbar"
-                anchorEl={anchorElUser}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                open={Boolean(anchorElUser)}
-                onClose={handleCloseUserMenu}
-              >
-                {delivererSettings.map(({ name, url }) => (
-                  <MenuItem key={name} onClick={handleCloseUserMenu}>
-                    <Link to={`${url}/${user._id}`}>
-                      <Typography textAlign="center">{name}</Typography>
-                    </Link>
+            <Box sx={{ display: "flex", gap: 2 }}>
+              <Typography textAlign="center">
+                Welcome, {user.fullName.split(" ")[0]}
+              </Typography>
+              <Box sx={{ flexGrow: 0 }}>
+                <Tooltip title="Open settings">
+                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                    <PersonIcon alt="Profile" sx={{ color: "white" }} />
+                  </IconButton>
+                </Tooltip>
+                <Menu
+                  sx={{ mt: "45px" }}
+                  id="menu-appbar"
+                  anchorEl={anchorElUser}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  open={Boolean(anchorElUser)}
+                  onClose={handleCloseUserMenu}
+                >
+                  {delivererSettings.map(({ name, url }) => (
+                    <MenuItem key={name} onClick={handleCloseUserMenu}>
+                      <Link to={`${url}/${user._id}`}>
+                        <Typography textAlign="center">{name}</Typography>
+                      </Link>
+                    </MenuItem>
+                  ))}
+                  <MenuItem key={"logOut"} onClick={handleCloseUserMenu}>
+                    <Button onClick={logOutUser} sx={{ color: "gray" }}>
+                      Logout
+                    </Button>
                   </MenuItem>
-                ))}
-                <MenuItem key={"logOut"} onClick={handleCloseUserMenu}>
-                  <Button onClick={logOutUser} sx={{ color: "gray" }}>
-                    Logout
-                  </Button>
-                </MenuItem>
-              </Menu>
+                </Menu>
+              </Box>
             </Box>
           )}
 
