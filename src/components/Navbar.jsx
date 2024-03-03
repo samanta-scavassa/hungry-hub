@@ -11,14 +11,13 @@ import {
   Typography,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import logo from "../assets/images/hungry-hub-logo.png";
 import PersonIcon from "@mui/icons-material/Person";
 import "./Navbar.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/auth.context";
 
-const jwtToken = localStorage.getItem("authToken");
-const userId = jwtToken ? JSON.parse(atob(jwtToken.split(".")[1]))._id : null;
 const pages = [
   { name: "Restaurants", url: "/restaurants" },
   { name: "Deliverer", url: "/delieverer" },
@@ -27,12 +26,13 @@ const settings = [
   { name: "Profile", url: "/hungry-hub/edit-profile" },
   { name: "Password", url: "/hungry-hub/edit-password" },
   { name: "My Adresses", url: "/hungry-hub/user-adresses" },
-  { name: "Logout", url: "/hungry-hub/logout" },
 ];
 
 export default function Navbar() {
+  const { isLoggedIn, user, logOutUser } = useContext(AuthContext);
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
+  const navigate = useNavigate();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -141,7 +141,7 @@ export default function Navbar() {
               </Link>
             ))}
           </Box>
-          {userId && (
+          {isLoggedIn && (
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -166,12 +166,38 @@ export default function Navbar() {
               >
                 {settings.map(({ name, url }) => (
                   <MenuItem key={name} onClick={handleCloseUserMenu}>
-                    <Link to={`${url}/${userId}`}>
+                    <Link to={`${url}/${user._id}`}>
                       <Typography textAlign="center">{name}</Typography>
                     </Link>
                   </MenuItem>
                 ))}
+                <MenuItem key={"logOut"} onClick={handleCloseUserMenu}>
+                  <Button onClick={logOutUser} sx={{ color: "gray" }}>
+                    Logout
+                  </Button>
+                </MenuItem>
               </Menu>
+            </Box>
+          )}
+
+          {!isLoggedIn && (
+            <Box className="NavbarButtons">
+              <Button
+                sx={{ backgroundColor: "white", color: "#EF233C" }}
+                variant="contained"
+                color="error"
+                onClick={() => navigate("/hungry-hub/login")}
+              >
+                LOGIN
+              </Button>
+              <Button
+                sx={{ backgroundColor: "#2B2D42", color: "white" }}
+                variant="contained"
+                color="error"
+                onClick={() => navigate("/hungry-hub/signup")}
+              >
+                SIGN UP
+              </Button>
             </Box>
           )}
         </Toolbar>
