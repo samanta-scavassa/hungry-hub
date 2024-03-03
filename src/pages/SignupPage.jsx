@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import authService from "../services/auth.service";
 import { Alert, Button, Stack, TextField } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
@@ -14,6 +14,7 @@ function SignupPage(props) {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [errorMessage, setErrorMessage] = useState(undefined);
   const [successMessage, setSuccessMessage] = useState(false);
+  const { roleId } = useParams();
 
   const navigate = useNavigate();
 
@@ -24,7 +25,7 @@ function SignupPage(props) {
 
   const handleSignupSubmit = (e) => {
     e.preventDefault();
-    const requestBody = { email, password, fullName, phoneNumber, dateOfBirth };
+    const requestBody = { email, password, fullName, phoneNumber, dateOfBirth, roleId };
 
     authService
       .signup(requestBody)

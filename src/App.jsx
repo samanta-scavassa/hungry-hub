@@ -18,7 +18,7 @@ function App() {
       <div className="Pages">
         <Routes>
           <Route path="/hungry-hub" element={<HomePage />} />
-          <Route path="/hungry-hub/signup" element={<SignupPage />} />
+          <Route path="/hungry-hub/signup/:roleId" element={<SignupPage />} />
           <Route path="/hungry-hub/login" element={<IsAnon><LoginPage /></IsAnon>} />
           <Route path="/hungry-hub/edit-profile/:userId" element={<EditProfilePage />} />
           <Route path="/hungry-hub/edit-password/:userId" element={<EditPasswordPage />} />
