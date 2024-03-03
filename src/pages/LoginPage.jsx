@@ -29,8 +29,7 @@ export default function LoginPage(props) {
         navigate("/hungry-hub");
       })
       .catch((error) => {
-        const errorDescription = error.response.data.message;
-        console.error(errorDescription);
+        console.error(error);
         navigate("/*");
       });
   };
