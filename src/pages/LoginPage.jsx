@@ -16,7 +16,6 @@ export default function LoginPage(props) {
   const handleEmail = (e) => setEmail(e.target.value);
   const handlePassword = (e) => setPassword(e.target.value);
 
-
   const handleLoginSubmit = (e) => {
     e.preventDefault();
     const requestBody = { email, password };
@@ -24,6 +23,7 @@ export default function LoginPage(props) {
     authService
       .login(requestBody)
       .then((response) => {
+        console.log("test");
         storeToken(response.data.authToken);
         authenticateUser();
         navigate("/hungry-hub");
