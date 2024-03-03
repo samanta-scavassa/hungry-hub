@@ -1,0 +1,17 @@
+.RestaurantCard {
+  width: 50%;
+  min-width: 300px;
+  max-height: 500px;
+  height: 100%;
+}
+
+.RestaurantCard img {
+  object-fit: cover;
+  height: 329px;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+  height: 100%;
+}
