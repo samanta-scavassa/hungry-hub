@@ -11,8 +11,8 @@ class RestaurantService {
     return this.api.post(`/api/restaurants`, requestBody);
   };
 
-  getAllRestaurants = () => {
-    return this.api.get(`/api/restaurants`);
+  getAllRestaurants = (rating) => {
+    return this.api.get(`/api/restaurants/?rating=${rating}`);
   };
 
   getRestaurantsByCategory = (category) => {

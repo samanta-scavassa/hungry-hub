@@ -66,8 +66,7 @@ export default function FoodCarousel() {
   return (
     <Box>
       <Container>
-        <h2>Restaurants</h2>
-        <h3>Food Categories</h3>
+        <h2>Food Categories</h2>
         <Carousel>
           {carousel.map((items, index) => (
             <Paper elevation={0} key={index} sx={{ height: 265 }}>

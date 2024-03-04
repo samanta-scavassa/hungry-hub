@@ -1,19 +1,27 @@
-import { Box } from "@mui/material";
+import { Box, Container } from "@mui/material";
 import Loading from "./Loading";
 import { useEffect, useState } from "react";
 import restaurantService from "../services/restaurants.service";
 import { useNavigate } from "react-router-dom";
 import RestaurantCard from "./RestaurantCard";
 import "./RestaurantsList.css";
+import RestaurantsFilter from "./RestaurantsFilter";
 
 export default function RestaurantsList() {
   const [isLoading, setIsLoading] = useState(true);
   const [restaurants, setRestaurants] = useState([]);
   const navigate = useNavigate();
-  
+  const [filter, setFilter] = useState({
+    rating: "",
+  });
+
+  const handleFilterChange = (value) => {
+    setFilter(value);
+  };
+
   useEffect(() => {
     restaurantService
-      .getAllRestaurants()
+      .getAllRestaurants(filter.rating)
       .then((response) => {
         setRestaurants(response.data);
         setIsLoading(false);
@@ -22,7 +30,7 @@ export default function RestaurantsList() {
         console.log(error);
         navigate("/*");
       });
-  }, []);
+  }, [filter]);
 
   if (isLoading) {
     return (
@@ -33,7 +41,9 @@ export default function RestaurantsList() {
   }
 
   return (
-    <>
+    <Container>
+      <h2>Restaurants</h2>
+      <RestaurantsFilter onFilterChange={handleFilterChange} value={filter} />
       <Box className="RestaurantsListSection">
         {restaurants.map((restaurant) => {
           const diner = {
@@ -52,6 +62,6 @@ export default function RestaurantsList() {
           return <RestaurantCard key={diner._id} restaurant={diner} />;
         })}
       </Box>
-    </>
+    </Container>
   );
 }
