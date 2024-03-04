@@ -12,7 +12,7 @@ class RestaurantService {
   };
 
   getAllRestaurants = (rating) => {
-    return this.api.get(`/api/restaurants/?rating=${rating}`);
+    return this.api.get(`/api/restaurants?rating=${rating}`);
   };
 
   getRestaurantsByCategory = (category) => {

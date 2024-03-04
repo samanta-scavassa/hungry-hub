@@ -12,7 +12,7 @@ export default function RestaurantsList() {
   const [restaurants, setRestaurants] = useState([]);
   const navigate = useNavigate();
   const [filter, setFilter] = useState({
-    rating: "",
+    rating: null,
   });
 
   const handleFilterChange = (value) => {
