@@ -9,7 +9,7 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import EditProfilePage from "./pages/EditProfilePage";
 import EditPasswordPage from "./pages/EditPasswordPage";
-
+import RestaurantDetailsPage from "./pages/RestaurantDetailsPage";
 
 function App() {
   return (
@@ -19,9 +19,26 @@ function App() {
         <Routes>
           <Route path="/hungry-hub" element={<HomePage />} />
           <Route path="/hungry-hub/signup/:roleId" element={<SignupPage />} />
-          <Route path="/hungry-hub/login" element={<IsAnon><LoginPage /></IsAnon>} />
-          <Route path="/hungry-hub/edit-profile/:userId" element={<EditProfilePage />} />
-          <Route path="/hungry-hub/edit-password/:userId" element={<EditPasswordPage />} />
+          <Route
+            path="/hungry-hub/login"
+            element={
+              <IsAnon>
+                <LoginPage />
+              </IsAnon>
+            }
+          />
+          <Route
+            path="/hungry-hub/edit-profile/:userId"
+            element={<EditProfilePage />}
+          />
+          <Route
+            path="/hungry-hub/edit-password/:userId"
+            element={<EditPasswordPage />}
+          />
+          <Route
+            path="/hungry-hub/restaurants/:restaurantId"
+            element={<RestaurantDetailsPage />}
+          />
           <Route path="*" element={<ErrorPage />} />
         </Routes>
       </div>
