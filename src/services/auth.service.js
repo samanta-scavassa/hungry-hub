@@ -18,7 +18,6 @@ class AuthService {
   }
 
   login = (requestBody) => {
-    console.log(import.meta.env.SERVER_URL);
     return this.api.post("/auth/login", requestBody);
   };
 

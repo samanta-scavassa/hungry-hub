@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import addressService from "../services/adresses.service";
+import addressService from "../services/addresses.service";
 import { Stack } from "@mui/material";
 import { Alert, Button, TextField } from "@mui/material";
 import { AuthContext } from "../context/auth.context";

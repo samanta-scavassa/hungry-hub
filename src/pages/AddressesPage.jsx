@@ -11,7 +11,7 @@ import {
 import CabinIcon from "@mui/icons-material/Cabin";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import addressService from "../services/adresses.service";
+import addressService from "../services/addresses.service";
 import { useNavigate, useParams } from "react-router-dom";
 import "./AddressesPage.css";
 
