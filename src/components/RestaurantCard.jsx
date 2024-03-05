@@ -2,7 +2,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import { CardActionArea } from "@mui/material";
+import { Box, CardActionArea } from "@mui/material";
 import { Link } from "react-router-dom";
 import "./RestaurantCard.css";
 
@@ -17,6 +17,13 @@ function RestaurantCard({ restaurant }) {
             image={restaurant.image}
             alt="restaurant image"
           />
+          <Box className="labels">
+            {restaurant.rating && (
+              <div>
+                <span className="label">{restaurant.rating} ★</span>
+              </div>
+            )}
+          </Box>
           <CardContent>
             <Typography gutterBottom variant="h5" component="div">
               {restaurant.name}

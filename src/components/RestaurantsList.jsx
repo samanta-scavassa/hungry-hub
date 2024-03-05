@@ -1,4 +1,4 @@
-import { Box, Container } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 import Loading from "./Loading";
 import { useEffect, useState } from "react";
 import restaurantService from "../services/restaurants.service";
@@ -13,6 +13,7 @@ export default function RestaurantsList() {
   const navigate = useNavigate();
   const [filter, setFilter] = useState({
     rating: null,
+    category: null,
   });
 
   const handleFilterChange = (value) => {
@@ -21,7 +22,7 @@ export default function RestaurantsList() {
 
   useEffect(() => {
     restaurantService
-      .getAllRestaurants(filter.rating)
+      .getAllRestaurants(filter.rating, filter.category)
       .then((response) => {
         setRestaurants(response.data);
         setIsLoading(false);
@@ -45,6 +46,11 @@ export default function RestaurantsList() {
       <h2>Restaurants</h2>
       <RestaurantsFilter onFilterChange={handleFilterChange} value={filter} />
       <Box className="RestaurantsListSection">
+        {!restaurants.length && (
+          <Typography textAlign="center" variant="h6">
+            No results found
+          </Typography>
+        )}
         {restaurants.map((restaurant) => {
           const diner = {
             id: restaurant._id,
@@ -58,6 +64,7 @@ export default function RestaurantsList() {
             userId: restaurant.userId,
             operatingHours: restaurant.operatingHours,
             isActive: restaurant.isActive,
+            rating: restaurant.rating
           };
           return <RestaurantCard key={diner._id} restaurant={diner} />;
         })}
