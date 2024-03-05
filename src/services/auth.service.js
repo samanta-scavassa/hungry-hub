@@ -18,19 +18,19 @@ class AuthService {
   }
 
   login = (requestBody) => {
+    console.log(import.meta.env.SERVER_URL);
     return this.api.post("/auth/login", requestBody);
   };
 
-  signup = requestBody => {
-    return this.api.post('/auth/signup', requestBody);
-  }
+  signup = (requestBody) => {
+    return this.api.post("/auth/signup", requestBody);
+  };
 
   verify = () => {
-    return this.api.get('/auth/verify');
+    return this.api.get("/auth/verify");
   };
 }
 
 const authService = new AuthService();
- 
-export default authService;
 
+export default authService;
