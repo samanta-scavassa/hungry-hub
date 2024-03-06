@@ -8,7 +8,7 @@ import "./RestaurantCard.css";
 
 function RestaurantCard({ restaurant }) {
   return (
-    <Link to={`/hungry-hub/restaurants/${restaurant._id}`}>
+    <Link to={`/hungry-hub/restaurants/${restaurant.id}`}>
       <Card className="RestaurantCard" sx={{ maxWidth: 345 }}>
         <CardActionArea>
           <CardMedia

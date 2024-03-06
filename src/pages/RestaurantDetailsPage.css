@@ -1,0 +1,19 @@
+.RestaurantDetailsPage {
+  padding-bottom: 500px;
+}
+
+.MenuItemCard {
+  min-width: 300px;
+  max-height: 500px;
+  height: 100%;
+}
+
+.MenuItemCard img {
+  height: 329px;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+  height: 100%;
+}
