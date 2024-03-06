@@ -25,19 +25,21 @@ const pages = [
 const customerSettings = [
   { name: "Profile", url: "/hungry-hub/edit-profile" },
   { name: "Password", url: "/hungry-hub/edit-password" },
-  { name: "My Adresses", url: "/hungry-hub/user-adresses" },
+  { name: "My Adresses", url: "/hungry-hub/user-addresses" },
 ];
 
 const restaurantOwnerSettings = [
   { name: "Profile", url: "/hungry-hub/edit-profile" },
   { name: "Password", url: "/hungry-hub/edit-password" },
   { name: "My Restaurants", url: "/hungry-hub/user-restaurants" },
+  { name: "My Adresses", url: "/hungry-hub/user-addresses" },
 ];
 
 const delivererSettings = [
   { name: "Profile", url: "/hungry-hub/edit-profile" },
   { name: "Password", url: "/hungry-hub/edit-password" },
   { name: "My Delivers", url: "/hungry-hub/user-delivers" },
+  { name: "My Adresses", url: "/hungry-hub/user-addresses" },
 ];
 
 export default function Navbar() {

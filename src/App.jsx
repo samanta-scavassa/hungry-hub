@@ -9,7 +9,11 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import EditProfilePage from "./pages/EditProfilePage";
 import EditPasswordPage from "./pages/EditPasswordPage";
+import AddressesPage from "./pages/AddressesPage";
+import CreateAddressPage from "./pages/CreateAddressPage";
+import EditAddressPage from "./pages/EditAddressPage";
 import RestaurantDetailsPage from "./pages/RestaurantDetailsPage";
+
 
 function App() {
   return (
@@ -32,10 +36,22 @@ function App() {
             element={<EditProfilePage />}
           />
           <Route
+            path="/hungry-hub/user-addresses/:userId"
+            element={<AddressesPage />}
+          />
+          <Route
+            path="/hungry-hub/user-addresses/:userId/create"
+            element={<CreateAddressPage />}
+          />
+          <Route
+            path="/hungry-hub/user-addresses/:addressId/edit"
+            element={<EditAddressPage />}
+          />
+          <Route
             path="/hungry-hub/edit-password/:userId"
             element={<EditPasswordPage />}
           />
-          <Route
+           <Route
             path="/hungry-hub/restaurants/:restaurantId"
             element={<RestaurantDetailsPage />}
           />

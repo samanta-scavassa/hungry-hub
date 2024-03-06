@@ -1,0 +1,7 @@
+.CreateButtons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 48px;
+  margin-top: 32px;
+}
