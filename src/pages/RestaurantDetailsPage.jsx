@@ -14,12 +14,14 @@ import Loading from "../components/Loading";
 import restaurantService from "../services/restaurants.service";
 import menuService from "../services/menu.service";
 import "./RestaurantDetailsPage.css";
+import FoodCounter from "../components/FoodCounter";
 
 export default function RestaurantDetailsPage() {
   const { restaurantId } = useParams();
   const [restaurant, setRestaurant] = useState(null);
   const [menu, setMenu] = useState([]);
   const navigate = useNavigate();
+  let categories = [];
 
   const fetchRestaurant = () => {
     restaurantService
@@ -58,6 +60,10 @@ export default function RestaurantDetailsPage() {
     );
   }
 
+  if (menu.length !== 0) {
+    categories = [...new Set(menu.map((item) => item.category))];
+  }
+
   return (
     <Box className="RestaurantDetailsPage" sx={{ marginTop: 10 }}>
       <Card
@@ -81,7 +87,7 @@ export default function RestaurantDetailsPage() {
               borderRadius: 2,
             }}
             image={restaurant.image}
-            alt="Pet image"
+            alt="Restaurant image"
           />
           <CardContent
             sx={{ width: "100%" }}
@@ -96,34 +102,58 @@ export default function RestaurantDetailsPage() {
             <Typography variant="body2" color="#e7a74e">
               {restaurant.rating} ★
             </Typography>
-            <Grid item xs={12} sm={4} sx={{ display: "flex", marginTop: 5 }}>
-              {menu.length !== 0 &&
-                menu.map((menuItem) => (
-                  <Link
-                    to={`/hungry-hub/menu-items/${menuItem._id}`}
-                    key={menuItem._id}
-                  >
-                    <Card className="MenuItemCard" sx={{ maxWidth: 345 }}>
-                      <CardActionArea>
-                        <CardMedia
-                          component="img"
-                          height="140"
-                          image={menuItem.image}
-                          alt="menu item image"
-                        />
-                        <CardContent>
-                          <Typography gutterBottom variant="h5" component="div">
-                            {menuItem.name}
-                          </Typography>
-                          <Typography variant="body2" color="text.secondary">
-                            {menuItem.description}
-                          </Typography>
-                        </CardContent>
-                      </CardActionArea>
-                    </Card>
-                  </Link>
-                ))}
-            </Grid>
+            {categories.map((category) => (
+              <div key={category}>
+                <Typography variant="h6" sx={{ margin: "16px 0" }}>
+                  {category}
+                </Typography>
+                <Box display={"flex"} gap={5} flexWrap={"wrap"}>
+                  {menu
+                    .filter((item) => item.category === category)
+                    .map((menuItem) => (
+                      <Grid item xs={12} sm={4} key={menuItem._id}>
+                        <Card className="MenuItemCard" sx={{ maxWidth: 345 }}>
+                          <CardActionArea>
+                            <CardMedia
+                              component="img"
+                              height="140"
+                              image={menuItem.image}
+                              alt="menu item image"
+                            />
+                            <CardContent>
+                              <Typography
+                                gutterBottom
+                                variant="h6"
+                                component="div"
+                              >
+                                {menuItem.itemName}
+                              </Typography>
+                              <Typography
+                                variant="body1"
+                                color="text.secondary"
+                              >
+                                {menuItem.description}
+                              </Typography>
+                              <Box
+                                sx={{
+                                  display: "flex",
+                                  marginTop: "10px",
+                                  gap: 5,
+                                }}
+                              >
+                                <Typography variant="body1" color={"#2B2D42"}>
+                                  <b>€{menuItem.price}</b>
+                                </Typography>
+                                <FoodCounter item={menuItem} />
+                              </Box>
+                            </CardContent>
+                          </CardActionArea>
+                        </Card>
+                      </Grid>
+                    ))}
+                </Box>
+              </div>
+            ))}
           </CardContent>
         </Box>
       </Card>
