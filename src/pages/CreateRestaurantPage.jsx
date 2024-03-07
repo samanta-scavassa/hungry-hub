@@ -1,8 +1,18 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Stack, FormControlLabel, Checkbox } from "@mui/material";
-import { Alert, Button, TextField } from "@mui/material";
+import { Stack, TextField, Autocomplete, Chip } from "@mui/material";
+import { Alert, Button } from "@mui/material";
 import restaurantService from "../services/restaurants.service";
+
+const daysOfWeek = [
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+  "Sunday",
+];
 
 export default function CreateRestaurantPage() {
   const { userId } = useParams();
@@ -17,14 +27,10 @@ export default function CreateRestaurantPage() {
     image: null,
     userId: userId,
     operatingHours: {
-      Monday: { openingTime: "", closingTime: "", checked: false },
-      Tuesday: { openingTime: "", closingTime: "", checked: false },
-      Wednesday: { openingTime: "", closingTime: "", checked: false },
-      Thursday: { openingTime: "", closingTime: "", checked: false },
-      Friday: { openingTime: "", closingTime: "", checked: false },
-      Saturday: { openingTime: "", closingTime: "", checked: false },
-      Sunday: { openingTime: "", closingTime: "", checked: false },
+      openingTime: "",
+      closingTime: "",
     },
+    selectedDays: [],
   });
 
   const handleChange = (e) => {
@@ -35,65 +41,51 @@ export default function CreateRestaurantPage() {
     });
   };
 
-  const handleTimeChange = (day, timeType, value) => {
+  const handleTimeChange = (timeType, value) => {
     setRestaurant({
       ...restaurant,
       operatingHours: {
         ...restaurant.operatingHours,
-        [day]: {
-          ...restaurant.operatingHours[day],
-          [timeType]: value,
-        },
+        [timeType]: value,
       },
     });
   };
 
-  const handleCheckboxChange = (day) => {
-    setRestaurant({
-      ...restaurant,
-      operatingHours: {
-        ...restaurant.operatingHours,
-        [day]: {
-          ...restaurant.operatingHours[day],
-          checked: !restaurant.operatingHours[day].checked,
-        },
-      },
-    });
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const formData = new FormData();
-    Object.keys(restaurant).forEach((key) => {
-      if (key === "operatingHours") {
-        Object.keys(restaurant.operatingHours).forEach((day) => {
-          formData.append(
-            `operatingHours.${day}.openingTime`,
-            restaurant.operatingHours[day].openingTime
-          );
-          formData.append(
-            `operatingHours.${day}.closingTime`,
-            restaurant.operatingHours[day].closingTime
-          );
-        });
-      } else {
-        formData.append(key, restaurant[key]);
-      }
-    });
-
-    restaurantService
-      .postRestaurant(formData)
-      .then((response) => {
-        setSuccessMessage(true);
-        setTimeout(function () {
-          navigate(`/hungry-hub/user-restaurants/${userId}`);
-        }, 3500);
-      })
-      .catch((error) => {
-        const errorDescription = error.response.data.message;
-        setErrorMessage(errorDescription);
+    try {
+      const formData = new FormData();
+      Object.entries(restaurant).forEach(([key, value]) => {
+        if (key === "operatingHours") {
+          Object.entries(value).forEach(([timeKey, timeValue]) => {
+            formData.append(`operatingHours.${timeKey}`, timeValue);
+          });
+        } else if (key === "selectedDays") {
+          value.forEach((day) => {
+            formData.append(
+              `operatingHours.${day}.openingTime`,
+              restaurant.operatingHours.openingTime
+            );
+            formData.append(
+              `operatingHours.${day}.closingTime`,
+              restaurant.operatingHours.closingTime
+            );
+          });
+        } else {
+          formData.append(key, value);
+        }
       });
+
+      await restaurantService.postRestaurant(formData);
+      setSuccessMessage(true);
+      setTimeout(
+        () => navigate(`/hungry-hub/user-restaurants/${userId}`),
+        3500
+      );
+    } catch (error) {
+      setErrorMessage(error.response.data.message);
+    }
   };
 
   return (
@@ -138,46 +130,54 @@ export default function CreateRestaurantPage() {
               value={restaurant.description}
               onChange={handleChange}
             />
-            {Object.entries(restaurant.operatingHours).map(([day, times]) => (
-              <div key={day}>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={times.checked}
-                      onChange={() => handleCheckboxChange(day)}
-                      name={day}
-                    />
+            <Autocomplete
+              multiple
+              id="selectedDays"
+              options={daysOfWeek}
+              onChange={(event, newValue) =>
+                setRestaurant({ ...restaurant, selectedDays: newValue })
+              }
+              value={restaurant.selectedDays}
+              renderTags={(value, getTagProps) =>
+                value.map((option, index) => (
+                  <Chip
+                    key={option}
+                    variant="outlined"
+                    label={option}
+                    {...getTagProps({ index })}
+                  />
+                ))
+              }
+              renderInput={(params) => (
+                <TextField {...params} label="Select Days" />
+              )}
+            />
+            {restaurant.selectedDays.length > 0 && (
+              <>
+                <TextField
+                  label={`Opening Time`}
+                  type="time"
+                  value={restaurant.operatingHours.openingTime}
+                  onChange={(e) =>
+                    handleTimeChange("openingTime", e.target.value)
                   }
-                  label={day}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
                 />
-                {times.checked && (
-                  <>
-                    <TextField
-                      label={`${day} Opening Time`}
-                      type="time"
-                      value={times.openingTime}
-                      onChange={(e) =>
-                        handleTimeChange(day, "openingTime", e.target.value)
-                      }
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                    />
-                    <TextField
-                      label={`${day} Closing Time`}
-                      type="time"
-                      value={times.closingTime}
-                      onChange={(e) =>
-                        handleTimeChange(day, "closingTime", e.target.value)
-                      }
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                    />
-                  </>
-                )}
-              </div>
-            ))}
+                <TextField
+                  label={`Closing Time`}
+                  type="time"
+                  value={restaurant.operatingHours.closingTime}
+                  onChange={(e) =>
+                    handleTimeChange("closingTime", e.target.value)
+                  }
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+              </>
+            )}
             <input
               type="file"
               accept="image/*"
