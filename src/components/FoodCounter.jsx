@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Container, ButtonGroup, Button, TextField } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { blueGrey } from "@mui/material/colors";
@@ -35,29 +34,29 @@ const StyledInput = styled(TextField)({
   },
 });
 
-export default function FoodCounter() {
-  const [count, setCount] = useState(0);
-  const handleChange = (event) => {
-    setCount(Number(event.target.value));
+export default function FoodCounter({ onChange, value, id }) {
+  const handleChange = (count) => {
+    onChange(id, count);
   };
+
   return (
     <Container>
       <ButtonGroup>
         <StyledButton
-          onClick={() => setCount((prev) => prev - 1)}
-          disabled={count === 0}
+          onClick={() => handleChange(value - 1)}
+          disabled={value === 0}
           sx={{ width: "24px" }}
         >
           <RemoveIcon fontSize="small" />
         </StyledButton>
         <StyledInput
           size="small"
-          onChange={handleChange}
-          value={count}
+          disabled
+          value={value}
           sx={{ width: "48px" }}
         />
         <StyledButton
-          onClick={() => setCount((prev) => prev + 1)}
+          onClick={() => handleChange(value + 1)}
           sx={{ width: "24px" }}
         >
           <AddIcon fontSize="small" />

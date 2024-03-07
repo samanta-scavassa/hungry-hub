@@ -1,25 +1,32 @@
 import {
   Box,
+  Button,
   Card,
   CardActionArea,
   CardContent,
   CardMedia,
-  Container,
   Grid,
   Typography,
 } from "@mui/material";
-import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import Loading from "../components/Loading";
 import restaurantService from "../services/restaurants.service";
 import menuService from "../services/menu.service";
 import "./RestaurantDetailsPage.css";
 import FoodCounter from "../components/FoodCounter";
+import CartComponent from "../components/CartComponent";
+import { AuthContext } from "../context/auth.context";
+// import cartService from "../services/cart.service";
+import { CartContext } from "../context/cart.context";
 
 export default function RestaurantDetailsPage() {
+  const { addItemToCart } = useContext(CartContext);
+  const { user } = useContext(AuthContext);
+  const [cartOpen, setCartOpen] = useState(false);
   const { restaurantId } = useParams();
   const [restaurant, setRestaurant] = useState(null);
-  const [menu, setMenu] = useState([]);
+  const [menu, setMenu] = useState(null);
   const navigate = useNavigate();
   let categories = [];
 
@@ -39,7 +46,19 @@ export default function RestaurantDetailsPage() {
     menuService
       .getMenuItemByRestaurantId(restaurantId)
       .then((res) => {
-        setMenu(res.data);
+        let itemWithCount = {};
+
+        res.data.forEach((item) => {
+          itemWithCount = {
+            ...itemWithCount,
+            [item._id]: {
+              ...item,
+              count: 0,
+            },
+          };
+        });
+
+        setMenu(itemWithCount);
       })
       .catch((err) => {
         console.log(err);
@@ -60,9 +79,23 @@ export default function RestaurantDetailsPage() {
     );
   }
 
-  if (menu.length !== 0) {
-    categories = [...new Set(menu.map((item) => item.category))];
+  const menuItems = Object.values(menu);
+
+  if (menuItems.length !== 0) {
+    categories = [...new Set(menuItems.map((item) => item.category))];
   }
+
+  const handleCompleteOrder = async (menuItems) => {
+    const itemsToCart = menuItems.filter((menuItem) => menuItem.count > 0);
+    const addItemToCartPromises = itemsToCart.map((item) => {
+      return addItemToCart(user._id, restaurant._id, {
+        menuItemId: item._id,
+        quantity: item.count,
+      });
+    });
+    await Promise.all(addItemToCartPromises);
+    setCartOpen(true);
+  };
 
   return (
     <Box className="RestaurantDetailsPage" sx={{ marginTop: 10 }}>
@@ -82,7 +115,7 @@ export default function RestaurantDetailsPage() {
               height: "50%",
               width: "100%",
               minWidth: "85vw",
-              minHeight: "1vh",
+              minHeight: "38vh",
               maxHeight: "38vh",
               borderRadius: 2,
             }}
@@ -108,7 +141,7 @@ export default function RestaurantDetailsPage() {
                   {category}
                 </Typography>
                 <Box display={"flex"} gap={5} flexWrap={"wrap"}>
-                  {menu
+                  {menuItems
                     .filter((item) => item.category === category)
                     .map((menuItem) => (
                       <Grid item xs={12} sm={4} key={menuItem._id}>
@@ -138,13 +171,25 @@ export default function RestaurantDetailsPage() {
                                 sx={{
                                   display: "flex",
                                   marginTop: "10px",
-                                  gap: 5,
+                                  gap: 16,
                                 }}
                               >
                                 <Typography variant="body1" color={"#2B2D42"}>
                                   <b>€{menuItem.price}</b>
                                 </Typography>
-                                <FoodCounter item={menuItem} />
+                                <FoodCounter
+                                  id={menuItem._id}
+                                  value={menuItem.count}
+                                  onChange={(id, value) => {
+                                    setMenu({
+                                      ...menu,
+                                      [id]: {
+                                        ...menuItem,
+                                        count: value,
+                                      },
+                                    });
+                                  }}
+                                />
                               </Box>
                             </CardContent>
                           </CardActionArea>
@@ -155,8 +200,35 @@ export default function RestaurantDetailsPage() {
               </div>
             ))}
           </CardContent>
+          <Box
+            sx={{
+              marginTop: "32px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-end",
+            }}
+          >
+            <Button
+              sx={{
+                backgroundColor: "#EF233C",
+                color: "white",
+                width: "400px",
+              }}
+              variant="contained"
+              color="error"
+              onClick={() => handleCompleteOrder(menuItems)}
+            >
+              COMPLETE ORDER
+            </Button>
+          </Box>
         </Box>
       </Card>
+      <CartComponent
+        restaurant={restaurant}
+        cartItems={menuItems}
+        open={cartOpen}
+        onClose={() => setCartOpen(false)}
+      />
     </Box>
   );
 }
