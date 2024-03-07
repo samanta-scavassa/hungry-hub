@@ -12,6 +12,7 @@ import EditPasswordPage from "./pages/EditPasswordPage";
 import AddressesPage from "./pages/AddressesPage";
 import CreateAddressPage from "./pages/CreateAddressPage";
 import EditAddressPage from "./pages/EditAddressPage";
+import CreateRestaurantPage from "./pages/CreateRestaurantPage";
 
 function App() {
   return (
@@ -44,6 +45,10 @@ function App() {
           <Route
             path="/hungry-hub/user-addresses/:addressId/edit"
             element={<EditAddressPage />}
+          />
+          <Route
+            path="/hungry-hub/restaurants/create"
+            element={<CreateRestaurantPage />}
           />
           <Route
             path="/hungry-hub/edit-password/:userId"
