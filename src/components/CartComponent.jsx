@@ -21,7 +21,7 @@ export default function CartComponent({ restaurant, cartItems }) {
               {item.count}x {item.itemName}
             </Typography>
             <Typography>
-              <b>{item.price}</b>
+              <b>€ {item.price}</b>
             </Typography>
           </Box>
         ))}
