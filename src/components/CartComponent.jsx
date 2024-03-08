@@ -29,9 +29,9 @@ export default function CartComponent({ restaurant, cartItems }) {
 
         {cart !== null && (
           <>
-            <Typography>Subtotal: ${cart.totalPrice.toFixed(2)}</Typography>
-            <Typography>Delivery: 3</Typography>
-            <Typography>Total: {Number(cart.totalPrice) + 3}</Typography>
+            <Typography>Subtotal: € {cart.totalPrice.toFixed(2)}</Typography>
+            <Typography>Delivery: € 3</Typography>
+            <Typography>Total: € {Number(cart.totalPrice) + 3}</Typography>
           </>
         )}
         <Box
