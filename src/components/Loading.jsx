@@ -1,10 +1,19 @@
-import loading from "../assets/images/loading.gif";
-// import "./Loading.css";
+import { CircularProgress, Stack } from "@mui/material";
 
 export default function Loading() {
   return (
-    <div className="Loading">
-      <img src={loading} />
-    </div>
+    <Stack
+      sx={{
+        width: "100%",
+        flexGrow: 1,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+      spacing={2}
+      direction="row"
+    >
+      <CircularProgress color="error" />
+    </Stack>
   );
 }

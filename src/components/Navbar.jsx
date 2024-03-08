@@ -74,12 +74,10 @@ export default function Navbar() {
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <img className="Logo" src={logo} />
-          <Link to={"/hungry-hub"}>
+          <Link to="/hungry-hub">
             <Typography
               variant="h6"
               noWrap
-              component="a"
-              href="#app-bar-with-responsive-menu"
               sx={{
                 mr: 2,
                 display: { xs: "none", md: "flex" },
@@ -189,11 +187,11 @@ export default function Navbar() {
                   onClose={handleCloseUserMenu}
                 >
                   {customerSettings.map(({ name, url }) => (
-                    <MenuItem key={name} onClick={handleCloseUserMenu}>
-                      <Link to={`${url}/${user._id}`}>
+                    <Link key={name} to={`${url}/${user._id}`}>
+                      <MenuItem onClick={handleCloseUserMenu}>
                         <Typography textAlign="center">{name}</Typography>
-                      </Link>
-                    </MenuItem>
+                      </MenuItem>
+                    </Link>
                   ))}
                   <MenuItem key={"logOut"} onClick={handleCloseUserMenu}>
                     <Button onClick={logOutUser} sx={{ color: "gray" }}>

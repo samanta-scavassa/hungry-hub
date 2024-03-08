@@ -12,8 +12,8 @@ export default function RestaurantsList() {
   const [restaurants, setRestaurants] = useState([]);
   const navigate = useNavigate();
   const [filter, setFilter] = useState({
-    rating: null,
-    category: null,
+    rating: "",
+    category: "",
   });
 
   const handleFilterChange = (value) => {
@@ -22,7 +22,10 @@ export default function RestaurantsList() {
 
   useEffect(() => {
     restaurantService
-      .getAllRestaurants(filter.rating, filter.category)
+      .getAllRestaurants(
+        filter.rating ? filter.rating : "null",
+        filter.category ? filter.category : "null"
+      )
       .then((response) => {
         setRestaurants(response.data);
         setIsLoading(false);
@@ -34,11 +37,7 @@ export default function RestaurantsList() {
   }, [filter]);
 
   if (isLoading) {
-    return (
-      <>
-        <Loading />
-      </>
-    );
+    return <Loading />;
   }
 
   return (
@@ -51,23 +50,9 @@ export default function RestaurantsList() {
             No results found
           </Typography>
         )}
-        {restaurants.map((restaurant) => {
-          const diner = {
-            id: restaurant._id,
-            name: restaurant.name,
-            addressId: restaurant.addressId,
-            email: restaurant.email,
-            phoneNumber: restaurant.phoneNumber,
-            category: restaurant.category,
-            description: restaurant.description,
-            image: restaurant.image,
-            userId: restaurant.userId,
-            operatingHours: restaurant.operatingHours,
-            isActive: restaurant.isActive,
-            rating: restaurant.rating
-          };
-          return <RestaurantCard key={diner._id} restaurant={diner} />;
-        })}
+        {restaurants.map((restaurant) => (
+          <RestaurantCard key={restaurant._id} restaurant={restaurant} />
+        ))}
       </Box>
     </Container>
   );
