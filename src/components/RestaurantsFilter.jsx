@@ -37,7 +37,7 @@ export default function RestaurantsFilter({ onFilterChange, value }) {
             onFilterChange({ ...value, rating: event.target.value })
           }
         >
-          <MenuItem value="null">
+          <MenuItem value="">
             <em>None</em>
           </MenuItem>
           <MenuItem value={1}>1 and up</MenuItem>
@@ -58,7 +58,7 @@ export default function RestaurantsFilter({ onFilterChange, value }) {
             onFilterChange({ ...value, category: event.target.value })
           }
         >
-          <MenuItem value="null">
+          <MenuItem value="">
             <em>None</em>
           </MenuItem>
           {categories.map((category) => (

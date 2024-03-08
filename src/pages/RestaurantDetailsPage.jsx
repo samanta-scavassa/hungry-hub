@@ -145,7 +145,7 @@ export default function RestaurantDetailsPage() {
                     .map((menuItem) => (
                       <Grid item xs={12} sm={4} key={menuItem._id}>
                         <Card className="MenuItemCard" sx={{ maxWidth: 345 }}>
-                          <CardActionArea>
+                          <Card>
                             <CardMedia
                               component="img"
                               height="140"
@@ -191,7 +191,7 @@ export default function RestaurantDetailsPage() {
                                 />
                               </Box>
                             </CardContent>
-                          </CardActionArea>
+                          </Card>
                         </Card>
                       </Grid>
                     ))}
@@ -201,7 +201,7 @@ export default function RestaurantDetailsPage() {
           </CardContent>
           <Box
             sx={{
-              marginTop: "32px",
+              margin: "32px 0",
               display: "flex",
               alignItems: "center",
               justifyContent: "flex-end",
