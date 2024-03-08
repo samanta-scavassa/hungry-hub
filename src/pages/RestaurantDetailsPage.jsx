@@ -17,13 +17,11 @@ import "./RestaurantDetailsPage.css";
 import FoodCounter from "../components/FoodCounter";
 import CartComponent from "../components/CartComponent";
 import { AuthContext } from "../context/auth.context";
-// import cartService from "../services/cart.service";
 import { CartContext } from "../context/cart.context";
 
 export default function RestaurantDetailsPage() {
-  const { addItemToCart } = useContext(CartContext);
+  const { cart, createCart, addItemToCart, openCart } = useContext(CartContext);
   const { user } = useContext(AuthContext);
-  const [cartOpen, setCartOpen] = useState(false);
   const { restaurantId } = useParams();
   const [restaurant, setRestaurant] = useState(null);
   const [menu, setMenu] = useState(null);
@@ -79,22 +77,23 @@ export default function RestaurantDetailsPage() {
     );
   }
 
-  const menuItems = Object.values(menu);
+  const menuItems = menu != null ? Object.values(menu) : [];
+  const itemsToCart = menuItems.filter((menuItem) => menuItem.count > 0);
 
   if (menuItems.length !== 0) {
     categories = [...new Set(menuItems.map((item) => item.category))];
   }
 
-  const handleCompleteOrder = async (menuItems) => {
-    const itemsToCart = menuItems.filter((menuItem) => menuItem.count > 0);
+  const handleCompleteOrder = async () => {
+    const cartId = await createCart(user._id, restaurant._id);
     const addItemToCartPromises = itemsToCart.map((item) => {
-      return addItemToCart(user._id, restaurant._id, {
+      return addItemToCart(cartId, {
         menuItemId: item._id,
         quantity: item.count,
       });
     });
     await Promise.all(addItemToCartPromises);
-    setCartOpen(true);
+    openCart();
   };
 
   return (
@@ -208,27 +207,24 @@ export default function RestaurantDetailsPage() {
               justifyContent: "flex-end",
             }}
           >
-            <Button
-              sx={{
-                backgroundColor: "#EF233C",
-                color: "white",
-                width: "400px",
-              }}
-              variant="contained"
-              color="error"
-              onClick={() => handleCompleteOrder(menuItems)}
-            >
-              COMPLETE ORDER
-            </Button>
+            {cart == null && itemsToCart.length > 0 && (
+              <Button
+                sx={{
+                  backgroundColor: "#EF233C",
+                  color: "white",
+                  width: "400px",
+                }}
+                variant="contained"
+                color="error"
+                onClick={handleCompleteOrder}
+              >
+                COMPLETE ORDER
+              </Button>
+            )}
           </Box>
         </Box>
       </Card>
-      <CartComponent
-        restaurant={restaurant}
-        cartItems={menuItems}
-        open={cartOpen}
-        onClose={() => setCartOpen(false)}
-      />
+      <CartComponent restaurant={restaurant} cartItems={menuItems} />
     </Box>
   );
 }

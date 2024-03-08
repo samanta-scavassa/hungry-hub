@@ -1,21 +1,16 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { Box, Button, Divider, Drawer, Typography } from "@mui/material";
 import { CartContext } from "../context/cart.context";
 
-export default function CartComponent({
-  restaurant,
-  cartItems,
-  open,
-  onClose,
-}) {
-  const { cart } = useContext(CartContext);
+export default function CartComponent({ restaurant, cartItems }) {
+  const { cart, isCartOpen, closeCart, deleteCart } = useContext(CartContext);
   const orderItems = cartItems.filter((menuItem) => menuItem.count > 0);
   //   const [isLoading, setIsLoading] = useState(true);
 
   //   if (isLoading) return <Loading />;
 
   return (
-    <Drawer anchor="right" open={open} onClose={onClose}>
+    <Drawer anchor="right" open={isCartOpen} onClose={closeCart}>
       <Box sx={{ width: 400, padding: "20px" }}>
         <Typography variant="body2">Your order with</Typography>
         <Typography variant="h6">{restaurant.name}</Typography>
@@ -56,7 +51,7 @@ export default function CartComponent({
             }}
             variant="outlined"
             color="error"
-            onClick={() => {}}
+            onClick={deleteCart}
           >
             CANCEL ORDER
           </Button>

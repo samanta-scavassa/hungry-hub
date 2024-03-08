@@ -17,6 +17,8 @@ import PersonIcon from "@mui/icons-material/Person";
 import "./Navbar.css";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/auth.context";
+import { CartContext } from "../context/cart.context";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
 const pages = [
   { name: "Restaurants", url: "/restaurants" },
@@ -47,6 +49,7 @@ export default function Navbar() {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const navigate = useNavigate();
+  const { cart, openCart } = useContext(CartContext);
   const customerRoleId = "65de3d32f96753f2845107c5";
   const restaurantRoleId = "65de3d4bf96753f2845107c6";
   const delivererRoleId = "65e48948f97465dc675505a7";
@@ -159,7 +162,7 @@ export default function Navbar() {
             ))}
           </Box>
           {isLoggedIn && user.roleId === customerRoleId && (
-            <Box sx={{ display: "flex", gap: 2 }}>
+            <Box sx={{ display: "flex", gap: 3, alignItems: "center" }}>
               <Typography textAlign="center">
                 Welcome, {user.fullName.split(" ")[0]}
               </Typography>
@@ -198,6 +201,11 @@ export default function Navbar() {
                     </Button>
                   </MenuItem>
                 </Menu>
+                {cart != null && (
+                  <IconButton onClick={openCart}>
+                    <ShoppingCartIcon alt="OrderCart" sx={{ color: "white" }} />
+                  </IconButton>
+                )}
               </Box>
             </Box>
           )}
@@ -205,8 +213,9 @@ export default function Navbar() {
           {isLoggedIn && user.roleId === restaurantRoleId && (
             <Box sx={{ display: "flex", gap: 2 }}>
               <Typography textAlign="center">
-                Welcome, {user.fullName.split(" ")[0]}
+                Welcome, {user.fullName.split(" ")[0]} Jose
               </Typography>
+
               <Box sx={{ flexGrow: 0 }}>
                 <Tooltip title="Open settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>

@@ -23,6 +23,10 @@ class CartService {
     return this.api.get(`/api/carts/user/${id}`);
   };
 
+  deleteCart = (id) => {
+    return this.api.delete(`/api/carts/${id}`);
+  };
+
 }
 
 const cartService = new CartService();
