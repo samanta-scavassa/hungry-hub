@@ -3,7 +3,7 @@ import axios from "axios";
 class MenuService {
   constructor() {
     this.api = axios.create({
-      baseURL: import.meta.env.SERVER_URL || "http://localhost:5005",
+      baseURL: 'https://hungry-hub.adaptable.app'
     });
   }
 

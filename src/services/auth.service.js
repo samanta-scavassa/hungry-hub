@@ -3,7 +3,7 @@ import axios from "axios";
 class AuthService {
   constructor() {
     this.api = axios.create({
-      baseURL: import.meta.env.SERVER_URL || "http://localhost:5005",
+      baseURL: "https://hungry-hub.adaptable.app",
     });
 
     this.api.interceptors.request.use((config) => {

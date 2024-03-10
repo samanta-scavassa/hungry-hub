@@ -3,7 +3,7 @@ import axios from "axios";
 class RestaurantService {
   constructor() {
     this.api = axios.create({
-      baseURL: import.meta.env.SERVER_URL || "http://localhost:5005",
+      baseURL: "https://hungry-hub.adaptable.app",
     });
   }
 
@@ -12,8 +12,10 @@ class RestaurantService {
   };
 
   getAllRestaurants = (rating, category) => {
-    console.log(this.api.baseURL)
-    return this.api.get(`/api/restaurants?rating=${rating}&category=${category}`);
+    console.log(this.api.baseURL);
+    return this.api.get(
+      `/api/restaurants?rating=${rating}&category=${category}`
+    );
   };
 
   getRestaurantsByCategory = (category) => {
