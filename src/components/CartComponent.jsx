@@ -1,13 +1,21 @@
-import { useContext } from "react";
-import { Box, Button, Divider, Drawer, Typography } from "@mui/material";
+import { useContext, useState } from "react";
+import { Box, Button, Divider, Drawer, Modal, Typography } from "@mui/material";
 import { CartContext } from "../context/cart.context";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 
 export default function CartComponent({ restaurant, cartItems }) {
   const { cart, isCartOpen, closeCart, deleteCart } = useContext(CartContext);
   const orderItems = cartItems.filter((menuItem) => menuItem.count > 0);
-  //   const [isLoading, setIsLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  //   if (isLoading) return <Loading />;
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   return (
     <Drawer anchor="right" open={isCartOpen} onClose={closeCart}>
@@ -63,10 +71,37 @@ export default function CartComponent({ restaurant, cartItems }) {
             }}
             variant="contained"
             color="error"
-            onClick={() => {}}
+            onClick={openModal}
           >
             PAY
           </Button>
+          <Modal
+            open={isModalOpen}
+            onClose={closeModal}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box
+              sx={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                width: 400,
+                bgcolor: "background.paper",
+                border: "2px solid #000",
+                boxShadow: 24,
+                p: 4,
+              }}
+            >
+              <Typography id="modal-modal-title" variant="h6" component="h2">
+                Your order is confirmed!
+              </Typography>
+              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                {restaurant.name} started preparing your order
+              </Typography>
+            </Box>
+          </Modal>
         </Box>
       </Box>
     </Drawer>
