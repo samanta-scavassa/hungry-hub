@@ -1,8 +1,9 @@
-import React, { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Stack, TextField, Autocomplete, Chip } from "@mui/material";
 import { Alert, Button } from "@mui/material";
 import restaurantService from "../services/restaurants.service";
+import { AuthContext } from "../context/auth.context";
 
 const daysOfWeek = [
   "Monday",
@@ -15,7 +16,7 @@ const daysOfWeek = [
 ];
 
 export default function CreateRestaurantPage() {
-  const { userId } = useParams();
+  const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   const [successMessage, setSuccessMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState(undefined);
@@ -25,7 +26,7 @@ export default function CreateRestaurantPage() {
     phoneNumber: "",
     description: "",
     image: null,
-    userId: userId,
+    userId: user._id,
     operatingHours: {
       openingTime: "",
       closingTime: "",
@@ -33,11 +34,31 @@ export default function CreateRestaurantPage() {
     selectedDays: [],
   });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  const handleNameChange = (e) => {
     setRestaurant({
       ...restaurant,
-      [name]: value,
+      name: e.target.value,
+    });
+  };
+
+  const handleEmailChange = (e) => {
+    setRestaurant({
+      ...restaurant,
+      email: e.target.value,
+    });
+  };
+
+  const handlePhoneNumberChange = (e) => {
+    setRestaurant({
+      ...restaurant,
+      phoneNumber: e.target.value,
+    });
+  };
+
+  const handleDescriptionChange = (e) => {
+    setRestaurant({
+      ...restaurant,
+      description: e.target.value,
     });
   };
 
@@ -59,19 +80,14 @@ export default function CreateRestaurantPage() {
       Object.entries(restaurant).forEach(([key, value]) => {
         if (key === "operatingHours") {
           Object.entries(value).forEach(([timeKey, timeValue]) => {
-            formData.append(`operatingHours.${timeKey}`, timeValue);
+            const [hour, minute] = timeValue.split(":");
+            formData.append(`operatingHours.${timeKey}.hour`, hour);
+            formData.append(`operatingHours.${timeKey}.minute`, minute);
           });
         } else if (key === "selectedDays") {
-          value.forEach((day) => {
-            formData.append(
-              `operatingHours.${day}.openingTime`,
-              restaurant.operatingHours.openingTime
-            );
-            formData.append(
-              `operatingHours.${day}.closingTime`,
-              restaurant.operatingHours.closingTime
-            );
-          });
+          // value.forEach((day) => {
+          formData.append(`operatingHours.days`, restaurant.selectedDays);
+          // });
         } else {
           formData.append(key, value);
         }
@@ -80,7 +96,7 @@ export default function CreateRestaurantPage() {
       await restaurantService.postRestaurant(formData);
       setSuccessMessage(true);
       setTimeout(
-        () => navigate(`/hungry-hub/user-restaurants/${userId}`),
+        () => navigate(`/hungry-hub/user-restaurants/${user._id}`),
         3500
       );
     } catch (error) {
@@ -101,7 +117,7 @@ export default function CreateRestaurantPage() {
               name="name"
               type="text"
               value={restaurant.name}
-              onChange={handleChange}
+              onChange={handleNameChange}
               required
             />
             <TextField
@@ -110,7 +126,7 @@ export default function CreateRestaurantPage() {
               name="email"
               type="email"
               value={restaurant.email}
-              onChange={handleChange}
+              onChange={handleEmailChange}
               required
             />
             <TextField
@@ -119,7 +135,7 @@ export default function CreateRestaurantPage() {
               name="phoneNumber"
               type="text"
               value={restaurant.phoneNumber}
-              onChange={handleChange}
+              onChange={handlePhoneNumberChange}
               required
             />
             <TextField
@@ -128,7 +144,7 @@ export default function CreateRestaurantPage() {
               name="description"
               type="text"
               value={restaurant.description}
-              onChange={handleChange}
+              onChange={handleDescriptionChange}
             />
             <Autocomplete
               multiple
@@ -191,7 +207,9 @@ export default function CreateRestaurantPage() {
               sx={{ backgroundColor: "white", color: "#EF233C" }}
               variant="outlined"
               color="error"
-              onClick={() => navigate(`/hungry-hub/user-restaurants/${userId}`)}
+              onClick={() =>
+                navigate(`/hungry-hub/user-restaurants/${user._id}`)
+              }
             >
               BACK
             </Button>
