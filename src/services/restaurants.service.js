@@ -12,7 +12,7 @@ class RestaurantService {
   };
 
   getAllRestaurants = (rating, category) => {
-    console.log(this.api)
+    console.log(this.api.baseURL)
     return this.api.get(`/api/restaurants?rating=${rating}&category=${category}`);
   };
 
