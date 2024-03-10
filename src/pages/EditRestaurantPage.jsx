@@ -1,9 +1,8 @@
-import { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { Stack, TextField, Autocomplete, Chip } from "@mui/material";
 import { Alert, Button } from "@mui/material";
 import restaurantService from "../services/restaurants.service";
-import { AuthContext } from "../context/auth.context";
 
 const daysOfWeek = [
   "Monday",
@@ -15,19 +14,17 @@ const daysOfWeek = [
   "Sunday",
 ];
 
-export default function CreateRestaurantPage() {
-  const { user } = useContext(AuthContext);
+const EditRestaurantPage = () => {
+  const { restaurantId } = useParams();
   const navigate = useNavigate();
   const [successMessage, setSuccessMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState(undefined);
-  console.log(user);
   const [restaurant, setRestaurant] = useState({
     name: "",
     email: "",
     phoneNumber: "",
     description: "",
     image: null,
-    userId: user?._id,
     operatingHours: {
       openingTime: "",
       closingTime: "",
@@ -35,31 +32,23 @@ export default function CreateRestaurantPage() {
     selectedDays: [],
   });
 
-  const handleNameChange = (e) => {
-    setRestaurant({
-      ...restaurant,
-      name: e.target.value,
-    });
-  };
+  useEffect(() => {
+    const fetchRestaurant = async () => {
+      try {
+        const response = await restaurantService.getRestaurant(restaurantId);
+        setRestaurant(response.data);
+      } catch (error) {
+        setErrorMessage("Error fetching restaurant data");
+      }
+    };
+    fetchRestaurant();
+  }, [restaurantId]);
 
-  const handleEmailChange = (e) => {
+  const handleChange = (e) => {
+    const { name, value } = e.target;
     setRestaurant({
       ...restaurant,
-      email: e.target.value,
-    });
-  };
-
-  const handlePhoneNumberChange = (e) => {
-    setRestaurant({
-      ...restaurant,
-      phoneNumber: e.target.value,
-    });
-  };
-
-  const handleDescriptionChange = (e) => {
-    setRestaurant({
-      ...restaurant,
-      description: e.target.value,
+      [name]: value,
     });
   };
 
@@ -77,40 +66,23 @@ export default function CreateRestaurantPage() {
     e.preventDefault();
 
     try {
-      const formData = new FormData();
-      Object.entries(restaurant).forEach(([key, value]) => {
-        if (key === "operatingHours") {
-          Object.entries(value).forEach(([timeKey, timeValue]) => {
-            const [hour, minute] = timeValue.split(":");
-            formData.append(`operatingHours.${timeKey}.hour`, hour);
-            formData.append(`operatingHours.${timeKey}.minute`, minute);
-          });
-        } else if (key === "selectedDays") {
-          // value.forEach((day) => {
-          formData.append(`operatingHours.days`, restaurant.selectedDays);
-          // });
-        } else {
-          formData.append(key, value);
-        }
-      });
-
-      await restaurantService.postRestaurant(formData);
+      await restaurantService.updateRestaurant(restaurantId, restaurant);
       setSuccessMessage(true);
-      setTimeout(
-        () => navigate(`/hungry-hub/user-restaurants/${user._id}`),
-        3500
-      );
+      setTimeout(() => {
+        setSuccessMessage(false);
+        navigate(`/restaurant/${restaurantId}`);
+      }, 3500);
     } catch (error) {
-      setErrorMessage(error.response.data.message);
+      setErrorMessage("Error updating restaurant");
     }
   };
 
   return (
     <div>
-      <div className="CreateRestaurantPage">
-        <h1>Create Restaurant</h1>
+      <div className="EditRestaurantPage">
+        <h1>Edit Restaurant</h1>
 
-        <form className="CreateRestaurantForm" onSubmit={handleSubmit}>
+        <form className="EditRestaurantForm" onSubmit={handleSubmit}>
           <Stack spacing={2} direction="column" sx={{ margin: 4 }}>
             <TextField
               id="name"
@@ -118,7 +90,7 @@ export default function CreateRestaurantPage() {
               name="name"
               type="text"
               value={restaurant.name}
-              onChange={handleNameChange}
+              onChange={handleChange}
               required
             />
             <TextField
@@ -127,7 +99,7 @@ export default function CreateRestaurantPage() {
               name="email"
               type="email"
               value={restaurant.email}
-              onChange={handleEmailChange}
+              onChange={handleChange}
               required
             />
             <TextField
@@ -136,7 +108,7 @@ export default function CreateRestaurantPage() {
               name="phoneNumber"
               type="text"
               value={restaurant.phoneNumber}
-              onChange={handlePhoneNumberChange}
+              onChange={handleChange}
               required
             />
             <TextField
@@ -145,7 +117,7 @@ export default function CreateRestaurantPage() {
               name="description"
               type="text"
               value={restaurant.description}
-              onChange={handleDescriptionChange}
+              onChange={handleChange}
             />
             <Autocomplete
               multiple
@@ -203,14 +175,12 @@ export default function CreateRestaurantPage() {
               }
             />
           </Stack>
-          <div className="CreateButtons">
+          <div className="EditButtons">
             <Button
               sx={{ backgroundColor: "white", color: "#EF233C" }}
               variant="outlined"
               color="error"
-              onClick={() =>
-                navigate(`/hungry-hub/user-restaurants/${user._id}`)
-              }
+              onClick={() => navigate(`/restaurant/${restaurantId}`)}
             >
               BACK
             </Button>
@@ -224,7 +194,7 @@ export default function CreateRestaurantPage() {
             </Button>
           </div>
           {successMessage && (
-            <Alert sx={{ mb: 2 }}>Restaurant successfully created</Alert>
+            <Alert sx={{ mb: 2 }}>Restaurant successfully updated</Alert>
           )}
         </form>
 
@@ -232,4 +202,6 @@ export default function CreateRestaurantPage() {
       </div>
     </div>
   );
-}
+};
+
+export default EditRestaurantPage;
