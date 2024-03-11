@@ -76,6 +76,7 @@ function CartProviderWrapper(props) {
         openCart,
         closeCart,
         deleteCart,
+        setCart
       }}
     >
       {props.children}

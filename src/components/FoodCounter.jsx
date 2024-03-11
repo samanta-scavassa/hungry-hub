@@ -1,4 +1,4 @@
-import { Container, ButtonGroup, Button, TextField } from "@mui/material";
+import { ButtonGroup, Button, TextField, Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { blueGrey } from "@mui/material/colors";
 import AddIcon from "@mui/icons-material/Add";
@@ -40,7 +40,7 @@ export default function FoodCounter({ onChange, value, id }) {
   };
 
   return (
-    <Container>
+    <Box>
       <ButtonGroup>
         <StyledButton
           onClick={() => handleChange(value - 1)}
@@ -62,6 +62,6 @@ export default function FoodCounter({ onChange, value, id }) {
           <AddIcon fontSize="small" />
         </StyledButton>
       </ButtonGroup>
-    </Container>
+    </Box>
   );
 }
