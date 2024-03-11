@@ -101,7 +101,7 @@ function Item({ items, handleFilter }) {
       {items.map((foodItem, index) => (
         <Button
           className="MediaLink"
-          onClick={handleFilter(foodItem.category)}
+          onClick={() => handleFilter(foodItem.name)}
           key={index}
         >
           <Card sx={{ width: "100%" }}>
