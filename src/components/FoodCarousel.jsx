@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Card,
   CardContent,
   CardMedia,
@@ -26,6 +27,7 @@ import mediterranean from "../assets/images/food-categories/mediterranean.jpg";
 import mexican from "../assets/images/food-categories/mexican.jpg";
 import Carousel from "react-material-ui-carousel";
 import "./FoodCarousel.css";
+import RestaurantsList from "./RestaurantsList";
 
 const categories = [
   { name: "American", image: americanFood },
@@ -62,6 +64,9 @@ const generateFoodCarouselItems = () => {
 };
 
 export default function FoodCarousel() {
+  const handleFilter = (filter) => {
+    return <RestaurantsList category={filter} />;
+  };
   const carousel = generateFoodCarouselItems();
   return (
     <Box>
@@ -70,7 +75,7 @@ export default function FoodCarousel() {
         <Carousel>
           {carousel.map((items, index) => (
             <Paper elevation={0} key={index} sx={{ height: 265 }}>
-              <Item items={items} />
+              <Item items={items} handleFilter={handleFilter} />
             </Paper>
           ))}
         </Carousel>
@@ -79,7 +84,7 @@ export default function FoodCarousel() {
   );
 }
 
-function Item({ items }) {
+function Item({ items, handleFilter }) {
   return (
     <Grid
       item
@@ -94,9 +99,9 @@ function Item({ items }) {
       }}
     >
       {items.map((foodItem, index) => (
-        <Link
+        <Button
           className="MediaLink"
-          to={`/hungry-hub/restaurants/category/${foodItem.name}`}
+          onClick={handleFilter(foodItem.category)}
           key={index}
         >
           <Card sx={{ width: "100%" }}>
@@ -120,7 +125,7 @@ function Item({ items }) {
               </Typography>
             </CardContent>
           </Card>
-        </Link>
+        </Button>
       ))}
     </Grid>
   );

@@ -7,13 +7,13 @@ import RestaurantCard from "./RestaurantCard";
 import "./RestaurantsList.css";
 import RestaurantsFilter from "./RestaurantsFilter";
 
-export default function RestaurantsList() {
+export default function RestaurantsList({category}) {
   const [isLoading, setIsLoading] = useState(true);
   const [restaurants, setRestaurants] = useState([]);
   const navigate = useNavigate();
   const [filter, setFilter] = useState({
     rating: "",
-    category: "",
+    category: category? category :"" ,
   });
 
   const handleFilterChange = (value) => {
