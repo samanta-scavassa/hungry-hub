@@ -21,8 +21,8 @@ import { CartContext } from "../context/cart.context";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
 const pages = [
-  { name: "Restaurants", url: "/restaurants" },
-  { name: "Deliverer", url: "/delieverer" },
+  // { name: "Restaurants", url: "/restaurants" },
+  // { name: "Deliverer", url: "/delieverer" },
 ];
 const customerSettings = [
   { name: "Profile", url: "/hungry-hub/edit-profile" },

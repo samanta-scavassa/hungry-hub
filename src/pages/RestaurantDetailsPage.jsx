@@ -134,96 +134,111 @@ export default function RestaurantDetailsPage() {
             <Typography variant="body2" color="#e7a74e">
               {restaurant.rating} ★
             </Typography>
-            {categories.map((category) => (
-              <div key={category}>
-                <Typography variant="h6" sx={{ margin: "16px 0" }}>
-                  {category}
-                </Typography>
-                <Box display={"flex"} gap={5} flexWrap={"wrap"}>
-                  {menuItems
-                    .filter((item) => item.category === category)
-                    .map((menuItem) => (
-                      <Grid item xs={12} sm={4} key={menuItem._id}>
-                        <Card className="MenuItemCard" sx={{ maxWidth: 345 }}>
-                          <Card>
-                            <CardMedia
-                              component="img"
-                              height="140"
-                              image={menuItem.image}
-                              alt="menu item image"
-                            />
-                            <CardContent>
-                              <Typography
-                                gutterBottom
-                                variant="h6"
-                                component="div"
-                              >
-                                {menuItem.itemName}
-                              </Typography>
-                              <Typography
-                                variant="body1"
-                                color="text.secondary"
-                              >
-                                {menuItem.description}
-                              </Typography>
-                              <Box
-                                sx={{
-                                  display: "flex",
-                                  marginTop: "10px",
-                                  gap: 16,
-                                }}
-                              >
-                                <Typography variant="body1" color={"#2B2D42"}>
-                                  <b>€{menuItem.price}</b>
-                                </Typography>
-                                <FoodCounter
-                                  id={menuItem._id}
-                                  value={menuItem.count}
-                                  onChange={(id, value) => {
-                                    setMenu({
-                                      ...menu,
-                                      [id]: {
-                                        ...menuItem,
-                                        count: value,
-                                      },
-                                    });
-                                  }}
-                                />
-                              </Box>
-                            </CardContent>
-                          </Card>
-                        </Card>
-                      </Grid>
-                    ))}
-                </Box>
-              </div>
-            ))}
           </CardContent>
-          <Box
-            sx={{
-              margin: "32px 0",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "flex-end",
-            }}
-          >
-            {cart == null && itemsToCart.length > 0 && (
-              <Button
-                sx={{
-                  backgroundColor: "#EF233C",
-                  color: "white",
-                  width: "400px",
-                }}
-                variant="contained"
-                color="error"
-                onClick={handleCompleteOrder}
-              >
-                COMPLETE ORDER
-              </Button>
-            )}
-          </Box>
         </Box>
       </Card>
+      {categories.map((category) => (
+        <div key={category} style={{ maxWidth: "85vw", margin: "0 auto" }}>
+          <Typography variant="h6" sx={{ margin: "16px 0" }}>
+            {category}
+          </Typography>
+          <Box display={"flex"} gap={5} flexWrap={"wrap"}>
+            {menuItems
+              .filter((item) => item.category === category)
+              .map((menuItem) => (
+                <Grid item xs={12} sm={4} key={menuItem._id}>
+                  <Card
+                    className="MenuItemCard"
+                    sx={{
+                      maxWidth: 345,
+                      display: "flex",
+                      flexDirection: "column",
+                    }}
+                  >
+                    <CardMedia
+                      component="img"
+                      height="140"
+                      image={menuItem.image}
+                      alt="menu item image"
+                    />
+                    <CardContent
+                      sx={{
+                        display: "flex",
+                        flexGrow: 1,
+                        flexDirection: "column",
+                      }}
+                    >
+                      <Typography gutterBottom variant="h6" component="div">
+                        {menuItem.itemName}
+                      </Typography>
+                      <Typography
+                        variant="body1"
+                        color="text.secondary"
+                        sx={{ flexGrow: 1 }}
+                      >
+                        {menuItem.description}
+                      </Typography>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          marginTop: "10px",
+                          gap: 16,
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <Typography
+                          variant="body1"
+                          color={"#2B2D42"}
+                          sx={{ display: "flex", alignItems: "center" }}
+                        >
+                          <b>€{menuItem.price}</b>
+                        </Typography>
+                        <FoodCounter
+                          id={menuItem._id}
+                          value={menuItem.count}
+                          onChange={(id, value) => {
+                            setMenu({
+                              ...menu,
+                              [id]: {
+                                ...menuItem,
+                                count: value,
+                              },
+                            });
+                          }}
+                        />
+                      </Box>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              ))}
+          </Box>
+        </div>
+      ))}
+      <Box
+        sx={{
+          margin: "32px auto",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "flex-end",
+          maxWidth: "85vw",
+        }}
+      >
+        {cart == null && itemsToCart.length > 0 && (
+          <Button
+            sx={{
+              backgroundColor: "#EF233C",
+              color: "white",
+              width: "400px",
+            }}
+            variant="contained"
+            color="error"
+            onClick={handleCompleteOrder}
+          >
+            COMPLETE ORDER
+          </Button>
+        )}
+      </Box>
+
       <CartComponent restaurant={restaurant} cartItems={menuItems} />
     </Box>
   );
