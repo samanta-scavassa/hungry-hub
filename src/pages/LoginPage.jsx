@@ -1,4 +1,4 @@
-import { Button, TextField } from "@mui/material";
+import { Alert, Button, TextField } from "@mui/material";
 import authService from "../services/auth.service";
 import { useNavigate } from "react-router";
 import { useContext, useState } from "react";
@@ -9,12 +9,20 @@ import "./LoginPage.css";
 export default function LoginPage(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const { storeToken, authenticateUser } = useContext(AuthContext);
 
   const navigate = useNavigate();
 
-  const handleEmail = (e) => setEmail(e.target.value);
-  const handlePassword = (e) => setPassword(e.target.value);
+  const handleEmail = (e) => {
+    setEmail(e.target.value);
+    setErrorMessage("");
+  }
+
+  const handlePassword = (e) => { 
+    setPassword(e.target.value);
+    setErrorMessage("");
+  }
 
   const handleLoginSubmit = (e) => {
     e.preventDefault();
@@ -29,8 +37,10 @@ export default function LoginPage(props) {
         navigate("/hungry-hub");
       })
       .catch((error) => {
-        console.error(error);
-        navigate("/*");
+        const errorDescription = error.response
+          ? error.response.data.message
+          : "An unexpected error occurred. Please try again.";
+        setErrorMessage(errorDescription);
       });
   };
 
@@ -82,6 +92,11 @@ export default function LoginPage(props) {
               LOGIN
             </Button>
           </div>
+          {errorMessage && (
+            <Alert severity="error" sx={{ mb: 2, margin: 2 }}>
+              {errorMessage}
+            </Alert>
+          )}
         </form>
       </div>
     </div>
