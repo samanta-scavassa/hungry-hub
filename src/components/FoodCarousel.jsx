@@ -9,7 +9,6 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import { Link } from "react-router-dom";
 import americanFood from "../assets/images/food-categories/american.jpg";
 import asianFood from "../assets/images/food-categories/asian.jpg";
 import burger from "../assets/images/food-categories/burger.jpg";
@@ -94,7 +93,6 @@ function Item({ items, handleFilter }) {
         height: "100%",
         position: "relative",
         gap: 1,
-        // maxWidth: 1000,
         margin: "0 auto",
       }}
     >
@@ -112,7 +110,6 @@ function Item({ items, handleFilter }) {
               width="100%"
               image={foodItem.image}
               alt={foodItem.name}
-              // sx={{ minWidth: 200, minHeight: 200 }}
             />
             <CardContent>
               <Typography
