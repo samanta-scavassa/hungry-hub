@@ -12,33 +12,59 @@ function SignupPage(props) {
   const [password, setPassword] = useState("");
   const [dateOfBirth, setDateOfBirth] = useState(null);
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [errorMessage, setErrorMessage] = useState(undefined);
+  const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState(false);
   const { roleId } = useParams();
 
   const navigate = useNavigate();
 
-  const handleEmail = (e) => setEmail(e.target.value);
-  const handlePassword = (e) => setPassword(e.target.value);
-  const handleName = (e) => setFullName(e.target.value);
-  const handlePhoneNumber = (e) => setPhoneNumber(e.target.value);
+  const handleEmail = (e) => {
+    setEmail(e.target.value);
+    clearMessages();
+  };
+  const handlePassword = (e) => {
+    setPassword(e.target.value);
+    clearMessages();
+  };
+  const handleName = (e) => {
+    setFullName(e.target.value);
+    clearMessages();
+  };
+
+  const handlePhoneNumber = (e) => {
+    setPhoneNumber(e.target.value);
+    clearMessages();
+  };
+
+  const clearMessages = () => {
+    setErrorMessage("");
+    if (successMessage) setSuccessMessage(false);
+  };
 
   const handleSignupSubmit = (e) => {
     e.preventDefault();
-    const requestBody = { email, password, fullName, phoneNumber, dateOfBirth, roleId };
+    const requestBody = {
+      email,
+      password,
+      fullName,
+      phoneNumber,
+      dateOfBirth,
+      roleId,
+    };
 
     authService
       .signup(requestBody)
-      .then((response) => {
+      .then(() => {
         setSuccessMessage(true);
         setTimeout(function () {
           navigate("/hungry-hub/login");
         }, 3500);
       })
       .catch((error) => {
-        const errorDescription = error.response.data.message;
+        const errorDescription = error.response
+          ? error.response.data.message
+          : "An unexpected error occurred. Please try again.";
         setErrorMessage(errorDescription);
-        navigate("/*");
       });
   };
 
@@ -127,11 +153,16 @@ function SignupPage(props) {
             </Button>
           </div>
           {successMessage && (
-            <Alert sx={{ mb: 2 }}>Registration successful!</Alert>
+            <Alert severity="success" sx={{ mb: 2, margin: 2 }}>
+              Registration successful!
+            </Alert>
+          )}
+          {errorMessage && (
+            <Alert severity="error" sx={{ mb: 2, margin: 2 }}>
+              {errorMessage}
+            </Alert>
           )}
         </form>
-
-        {errorMessage && <p className="error-message">{errorMessage}</p>}
       </div>
     </div>
   );

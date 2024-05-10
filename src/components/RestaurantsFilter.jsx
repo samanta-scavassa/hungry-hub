@@ -3,24 +3,9 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { Box } from "@mui/material";
+import { categories } from "../constants/categories.js";
 
-const categories = [
-  "American",
-  "Asian",
-  "Burger",
-  "Dessert",
-  "German",
-  "Italian",
-  "Japanese",
-  "Pizza",
-  "Poke",
-  "Salad",
-  "Vegan",
-  "French",
-  "Indian",
-  "Mediterranean",
-  "Mexican",
-];
+const categorieNames = categories.map((category) => category.name);
 
 export default function RestaurantsFilter({ onFilterChange, value }) {
   return (
@@ -61,7 +46,7 @@ export default function RestaurantsFilter({ onFilterChange, value }) {
           <MenuItem value="">
             <em>None</em>
           </MenuItem>
-          {categories.map((category) => (
+          {categorieNames.map((category) => (
             <MenuItem key={category} value={category}>
               {category}
             </MenuItem>

@@ -62,8 +62,6 @@ function CartProviderWrapper(props) {
       console.log(error);
     }
   };
-  //   removeItemFromCart;
-  //   updateCart;
 
   return (
     <CartContext.Provider
